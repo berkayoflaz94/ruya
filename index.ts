@@ -44,6 +44,10 @@ async function getDreamInterpretation({ firstName, lastName, gender, age, dream,
     language: string
 }) {
     const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        throw new Error('API key is missing');
+    }
+
     const url = 'https://api.openai.com/v1/chat/completions';
 
     let prompt;
@@ -54,7 +58,7 @@ async function getDreamInterpretation({ firstName, lastName, gender, age, dream,
     }
 
     const payload = {
-        model: 'gpt-3.5-turbo', // Modeli güncelledik
+        model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 500,
     };
