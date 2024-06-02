@@ -1,5 +1,9 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+// .env dosyasını yükle
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,8 +54,8 @@ async function getDreamInterpretation({ firstName, lastName, gender, age, dream,
     }
 
     const payload = {
-        model: 'text-davinci-003',
-        prompt: prompt,
+        model: 'gpt-3.5-turbo', // Modeli güncelledik
+        messages: [{ role: 'user', content: prompt }],
         max_tokens: 500,
     };
 
@@ -67,7 +71,7 @@ async function getDreamInterpretation({ firstName, lastName, gender, age, dream,
             throw new Error(`OpenAI API returned status code ${response.status}`);
         }
 
-        const assistantMessage = response.data.choices[0].text.trim();
+        const assistantMessage = response.data.choices[0].message.content.trim();
         return { interpretation: assistantMessage };
     } catch (error: any) {
         console.error('Error contacting OpenAI API:', error.response ? error.response.data : error.message);
